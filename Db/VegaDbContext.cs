@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using vega.Domain.Models;
 
 namespace vega.Db
 {
@@ -8,5 +9,7 @@ namespace vega.Db
         {
 
         }
+
+        public DbSet<VehicleMake> Makes { get; set; }
     }
 }
