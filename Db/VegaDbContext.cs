@@ -1,15 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using vega.Domain.Models;
+using vega.Domain.Models.Vehicle;
 
 namespace vega.Db
 {
     public class VegaDbContext: DbContext
     {
+        public DbSet<VehicleMake> Makes { get; set; }
         public VegaDbContext(DbContextOptions<VegaDbContext> options): base(options) 
         {
-
         }
-
-        public DbSet<VehicleMake> Makes { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder) 
+        {
+            modelBuilder.Entity<VehicleFeature>().HasKey(i => new { i.FeatureId, i.VehicleId });
+        }
     }
 }
