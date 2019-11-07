@@ -6,6 +6,7 @@ namespace vega.Db
 {
     public class VegaDbContext: DbContext
     {
+        public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleMake> Makes { get; set; }
         public VegaDbContext(DbContextOptions<VegaDbContext> options): base(options) 
         {
