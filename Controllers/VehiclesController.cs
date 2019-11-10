@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using vega.Controllers.Resources;
 using vega.Db;
 using vega.Domain.Models.Vehicle;
@@ -13,12 +12,16 @@ namespace vega.Controllers
     public class VehiclesController : Controller
     {
         public IMapper Mapper { get; set; }
-        public VegaDbContext Context { get; set; }
         public IVehicleRepository VehicleRepository { get; set; }
-        public VehiclesController(VegaDbContext context, IMapper mapper, IVehicleRepository vehicleRepository)
+        public IUnitOfWork UnitOfWork { get; set; }
+        public VehiclesController( 
+            IMapper mapper, 
+            IVehicleRepository vehicleRepository, 
+            IUnitOfWork unitOfWork
+            )
         {
+            this.UnitOfWork = unitOfWork;
             this.VehicleRepository = vehicleRepository;
-            this.Context = context;
             this.Mapper = mapper;
         }
         [HttpPost]
@@ -31,7 +34,7 @@ namespace vega.Controllers
             vehicle.LastUpdate = DateTime.Now;
 
             VehicleRepository.Add(vehicle);
-            Context.SaveChanges();
+            await UnitOfWork.CompleteAsync();
 
             vehicle = await VehicleRepository.GetVehicle(vehicle.Id);
             var result = Mapper.Map<Vehicle, VehicleResource>(vehicle);
@@ -50,8 +53,9 @@ namespace vega.Controllers
             Mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
             vehicle.LastUpdate = DateTime.Now;
 
-            Context.SaveChanges();
+            await UnitOfWork.CompleteAsync();
 
+            vehicle = await VehicleRepository.GetVehicle(vehicle.Id);
             var result = Mapper.Map<Vehicle, VehicleResource>(vehicle);
             return Ok(result);
         }
@@ -64,7 +68,7 @@ namespace vega.Controllers
                 return NotFound();
 
             VehicleRepository.Remove(vehicle);
-            await Context.SaveChangesAsync();
+            await UnitOfWork.CompleteAsync();
 
             return Ok(id);
         }
