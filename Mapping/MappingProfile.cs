@@ -13,17 +13,31 @@ namespace vega.Mapping
         {
             // Domain to API
             CreateMap<VehicleMake, VehicleMakeResource>();
+            CreateMap<VehicleMake, BaseResource>();
             CreateMap<VehicleModel, VehicleModelResource>();
-             CreateMap<Vehicle, VehicleResource>()
+            
+            CreateMap<Vehicle, SaveVehicleResource>()
              .ForMember(v => v.Contact, opt => opt.MapFrom(resource => new ContactResource { 
                  Name = resource.ContactName, 
                  Email = resource.ContactEmail,
                  Phone = resource.ContactPhone 
             }))
             .ForMember(v => v.Features, opt => opt.MapFrom(resource => resource.Features.Select(i => i.FeatureId)));
+            
+            CreateMap<Vehicle, VehicleResource>()
+            .ForMember(v => v.Make, opt => opt.MapFrom(resource => resource.VehicleModel.Make))
+            .ForMember(v => v.Contact, opt => opt.MapFrom(resource => new ContactResource { 
+                 Name = resource.ContactName, 
+                 Email = resource.ContactEmail,
+                 Phone = resource.ContactPhone 
+            }))
+            .ForMember(v => v.Features, 
+             opt => opt.MapFrom(resource => resource.Features.Select(
+                 i => new FeatureResource {Id = i.Feature.Id, Name = i.Feature.Name}
+                )));
 
             // API to Domain
-            CreateMap<VehicleResource, Vehicle>()
+            CreateMap<SaveVehicleResource, Vehicle>()
             .ForMember(v => v.Id, opt => opt.Ignore())
             .ForMember(v => v.ContactName, opt => opt.MapFrom(resource => resource.Contact.Name))
             .ForMember(v => v.ContactEmail, opt => opt.MapFrom(resource => resource.Contact.Email))
@@ -37,8 +51,6 @@ namespace vega.Mapping
                 var featuresToAdd = vResource.Features.Where(i => !v.Features.Any(f => f.FeatureId == i)); 
                 foreach(var id in featuresToAdd)
                     v.Features.Add(new VehicleFeature {FeatureId = id});
-
-
             });
         }
     }
