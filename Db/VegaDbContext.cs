@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using vega.Domain.Models;
+using vega.Domain.Models.Features;
 using vega.Domain.Models.Vehicle;
 
 namespace vega.Db
@@ -8,6 +9,7 @@ namespace vega.Db
     {
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleMake> Makes { get; set; }
+        public DbSet<Feature> Features { get; set; }
         public VegaDbContext(DbContextOptions<VegaDbContext> options): base(options) 
         {
         }

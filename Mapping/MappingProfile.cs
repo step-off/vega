@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using vega.Controllers.Resources;
 using vega.Domain.Models;
+using vega.Domain.Models.Features;
 using vega.Domain.Models.Vehicle;
 
 namespace vega.Mapping
@@ -15,6 +16,7 @@ namespace vega.Mapping
             CreateMap<VehicleMake, VehicleMakeResource>();
             CreateMap<VehicleMake, BaseResource>();
             CreateMap<VehicleModel, VehicleModelResource>();
+            CreateMap<Feature, FeatureResource>();
             
             CreateMap<Vehicle, SaveVehicleResource>()
              .ForMember(v => v.Contact, opt => opt.MapFrom(resource => new ContactResource { 
