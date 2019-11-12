@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 class VehicleForm extends Component {
     state = { 
         makes: [],
-        currentMakeId: ''
+        currentMakeId: '',
+        features: [],
+        chosenFeatures: []
      }
 
-    render() { 
-        console.log(this.state.currentMakeId);
-        console.log(this.state.makes);
-        
-        
+    render() {       
         return ( 
             <form>
                 <div className="form-group">
@@ -31,6 +29,15 @@ class VehicleForm extends Component {
                         ) : null}
                     </select>
                 </div>
+                <div className="form-group">
+                   {this.state.features.map(i => {
+                       return <label htmlFor={i.id}>
+                           <span>{i.name}</span>
+                           <input type="checkbox" id={i.id}/>
+                       </label>
+                   })} 
+                </div>
+                <button type='submit' class="btn btn-primary">Send</button>
             </form>
         );
     }
@@ -40,11 +47,15 @@ class VehicleForm extends Component {
     }
 
     fetchData = async () => {
-        const resp = await fetch('api/makes');
-        const result = await resp.json(); 
+        const makesResp = await fetch('api/makes');
+        const featuresResp = await fetch('api/features');
+        const makes = await makesResp.json(); 
+        const features = await featuresResp.json();
+        
         this.setState({
-            makes: result,
-            currentMakeId: result[0].id.toString()
+            makes,
+            features,
+            currentMakeId: makes[0].id.toString()
         })   
     }
 
