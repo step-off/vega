@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using vega.Controllers.Resources;
-using vega.Db;
+using vega.Core;
 using vega.Domain.Models.Vehicle;
 
 namespace vega.Controllers

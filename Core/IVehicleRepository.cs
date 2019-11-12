@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
+using vega.Db;
 using vega.Domain.Models.Vehicle;
 
-namespace vega.Db
+namespace vega.Core
 {
    public interface IVehicleRepository
     {

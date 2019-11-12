@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace vega.Db
+namespace vega.Core
 {
     public interface IUnitOfWork
     {
