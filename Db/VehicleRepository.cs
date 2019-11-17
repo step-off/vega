@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using vega.Core;
@@ -21,7 +22,17 @@ namespace vega.Db
 
             return vehicle;
         }
+        public async Task<List<Vehicle>> GetAll(bool includeRelated = true) 
+        {
+            var contextModels = Context.Vehicles
+                .Include(v => v.Features)
+                .ThenInclude(vf => vf.Feature)
+                .Include(v => v.VehicleModel);
 
+            var vehiclesList = await contextModels.ToListAsync();
+
+            return vehiclesList;   
+        }
         public VehicleRepository(VegaDbContext context)
         {
             this.Context = context;

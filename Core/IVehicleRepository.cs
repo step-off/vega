@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using vega.Db;
 using vega.Domain.Models.Vehicle;
@@ -9,6 +10,7 @@ namespace vega.Core
         VegaDbContext Context { get; }
 
         Task<Vehicle> GetVehicle(int id, bool includeRelated = true);
+        Task<List<Vehicle>> GetAll(bool includeRelated = true);
         void Add(Vehicle vehicle);
         void Remove(Vehicle vehicle);
     }
