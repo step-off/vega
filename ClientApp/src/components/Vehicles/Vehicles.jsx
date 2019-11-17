@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {VehicleForm} from './VehicleForm/VehicleForm';
 import {Switch, Route} from "react-router-dom";
+import VehiclesList from './VehiclesList/VehiclesList';
 
 class Vehicles extends Component {
     render() {
@@ -8,7 +9,7 @@ class Vehicles extends Component {
 
         return <Switch>
             <Route exact path={path}>
-                <h1>Vehicles</h1>
+                <VehiclesList />
             </Route>
             <Route path={`${path}/new`} component={VehicleForm}/>
         </Switch>;
