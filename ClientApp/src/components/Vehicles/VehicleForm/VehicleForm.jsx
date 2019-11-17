@@ -74,8 +74,10 @@ class VehicleForm extends Component {
     }
 
     fetchData = async () => {
-        const makesResp = await fetch('api/makes');
-        const featuresResp = await fetch('api/features');
+        const [makesResp, featuresResp] = await Promise.all([
+            fetch('api/makes'), 
+            fetch('api/features')
+        ]);
         const makes = await makesResp.json(); 
         const features = await featuresResp.json();
         
