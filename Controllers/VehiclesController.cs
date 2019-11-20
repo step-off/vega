@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using vega.Controllers.Resources;
 using vega.Core;
+using vega.Domain.Models;
 using vega.Domain.Models.Vehicle;
 
 namespace vega.Controllers
@@ -26,9 +27,10 @@ namespace vega.Controllers
             this.Mapper = mapper;
         }
         [HttpGet]
-        public async Task<List<VehicleResource>> GetFeatures()
+        public async Task<List<VehicleResource>> GetFeatures(FilterResource filterResource)
         {
-            var vehicles = await VehicleRepository.GetAll();
+            var filter = Mapper.Map<FilterResource, Filter>(filterResource);
+            var vehicles = await VehicleRepository.GetAll(filter);
             return Mapper.Map<List<Vehicle>, List<VehicleResource>>(vehicles);
         }
         [HttpPost]

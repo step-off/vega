@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using vega.Core;
+using vega.Domain.Models;
 using vega.Domain.Models.Vehicle;
 
 namespace vega.Db
@@ -22,12 +24,18 @@ namespace vega.Db
 
             return vehicle;
         }
-        public async Task<List<Vehicle>> GetAll(bool includeRelated = true) 
+        public async Task<List<Vehicle>> GetAll(Filter filter, bool includeRelated = true) 
         {
             var contextModels = Context.Vehicles
+                .Include(v => v.VehicleModel)
+                    .ThenInclude(m => m.Make)
                 .Include(v => v.Features)
-                .ThenInclude(vf => vf.Feature)
-                .Include(v => v.VehicleModel);
+                    .ThenInclude(vf => vf.Feature)
+                .AsQueryable();
+
+            if (filter.MakeId.HasValue) {
+                contextModels = contextModels.Where(v => v.VehicleModel.MakeId == filter.MakeId);
+            }    
 
             var vehiclesList = await contextModels.ToListAsync();
 

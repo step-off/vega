@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 class VehicleItem extends Component {
     render() { 
         const {vehicle} = this.props;
-
-        return <li>
-            <span>{`id: ${vehicle.id}`}</span>
-        </li>;
+        
+        return  <tr>
+            <td>{vehicle.id}</td>
+            <td>{vehicle.name}</td>
+        </tr>
     }
 }
  
