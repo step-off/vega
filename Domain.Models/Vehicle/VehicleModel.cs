@@ -12,5 +12,6 @@ namespace vega.Domain.Models
         public string Name { get; set; }
         public VehicleMake Make { get; set; }
         public int MakeId { get; set; }
+        // public int ModelId { get; set; }
     }
 }

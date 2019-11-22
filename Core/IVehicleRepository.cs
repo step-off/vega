@@ -11,7 +11,7 @@ namespace vega.Core
         VegaDbContext Context { get; }
 
         Task<Vehicle> GetVehicle(int id, bool includeRelated = true);
-        Task<List<Vehicle>> GetAll(Filter filter, bool includeRelated = true);
+        Task<List<Vehicle>> GetAll(VehicleQuery filter, bool includeRelated = true);
         void Add(Vehicle vehicle);
         void Remove(Vehicle vehicle);
     }

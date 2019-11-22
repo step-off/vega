@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using vega.Core;
 using vega.Domain.Models;
 using vega.Domain.Models.Vehicle;
+using vega.Extensions;
 
 namespace vega.Db
 {
@@ -24,20 +27,26 @@ namespace vega.Db
 
             return vehicle;
         }
-        public async Task<List<Vehicle>> GetAll(Filter filter, bool includeRelated = true) 
+        public async Task<List<Vehicle>> GetAll(VehicleQuery queryObj, bool includeRelated = true) 
         {
-            var contextModels = Context.Vehicles
+            var query = Context.Vehicles
                 .Include(v => v.VehicleModel)
                     .ThenInclude(m => m.Make)
                 .Include(v => v.Features)
                     .ThenInclude(vf => vf.Feature)
                 .AsQueryable();
 
-            if (filter.MakeId.HasValue) {
-                contextModels = contextModels.Where(v => v.VehicleModel.MakeId == filter.MakeId);
+            var sortingDictionary = new Dictionary<string, Expression<Func<Vehicle, object>>>()
+            {
+                ["make"] = v => v.VehicleModel.Make.Name,
+                ["name"] = v => v.Name
+            };
+            if (queryObj.MakeId.HasValue) {
+                query = query.Where(v => v.VehicleModel.MakeId == queryObj.MakeId);
             }    
-
-            var vehiclesList = await contextModels.ToListAsync();
+            query = query.ApplyOrdering(queryObj, sortingDictionary);
+            
+            var vehiclesList = await query.ToListAsync();
 
             return vehiclesList;   
         }
