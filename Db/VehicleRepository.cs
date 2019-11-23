@@ -45,6 +45,8 @@ namespace vega.Db
                 query = query.Where(v => v.VehicleModel.MakeId == queryObj.MakeId);
             }    
             query = query.ApplyOrdering(queryObj, sortingDictionary);
+
+            query = query.ApplyPaging(queryObj);
             
             var vehiclesList = await query.ToListAsync();
 
