@@ -19,9 +19,11 @@ namespace vega.Domain.Models.Vehicle
         public string ContactPhone { get; set; }
         public DateTime LastUpdate { get; set; }
         public List<VehicleFeature> Features { get; set; }
+        public List<Photo> Photos { get; set; }
         public Vehicle()
         {
             Features = new List<VehicleFeature>();
+            Photos = new List<Photo>();
         }
     }
 }

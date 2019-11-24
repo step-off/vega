@@ -13,6 +13,7 @@ namespace vega.Mapping
         public MappingProfile()
         {
             // Domain to API
+            CreateMap<Photo, PhotoResource>();
             CreateMap<VehicleMake, VehicleMakeResource>();
             CreateMap<VehicleMake, BaseResource>();
             CreateMap<VehicleModel, VehicleModelResource>();

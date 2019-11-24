@@ -9,14 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using vega.Mapping;
 using vega.Core;
+using System.IO;
+using vega.Domain.Models.Vehicle;
 
 namespace vega
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            if (string.IsNullOrWhiteSpace(env.WebRootPath))
+                env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
         }
 
         public IConfiguration Configuration { get; }
@@ -24,6 +28,7 @@ namespace vega
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
