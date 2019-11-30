@@ -11,6 +11,7 @@ using vega.Mapping;
 using vega.Core;
 using System.IO;
 using vega.Domain.Models.Vehicle;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace vega
 {
@@ -43,6 +44,16 @@ namespace vega
             services.AddDbContext<VegaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-dam2e7y0.auth0.com/";
+                options.Audience = "https://api.vega.com";
+            });
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -67,7 +78,8 @@ namespace vega
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseAuthentication();
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
